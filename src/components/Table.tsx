@@ -1,11 +1,13 @@
 import React from 'react';
 import { Task } from '../models/Task';
 import styled from 'styled-components';
+import trash from '../../public/images/trash.png';
 
 interface Props {
   data: Task[];
-  delete: () => void;
-  edit: () => void;
+  delete: (id: number) => void;
+  edit: (id: number) => void;
+  watch: (id: number) => void;
 }
 
 const TableWrapper = styled.table`
@@ -42,7 +44,7 @@ const HeaderCheckBox = styled.td`
   border-bottom: 1px solid #dddddd;
 `;
 
-export const Table: React.FC<Props> = ({ data, delete: any, edit }) => {
+export const Table: React.FC<Props> = ({ data, delete: any, edit, watch }) => {
   const headers = ['name', 'phone', 'email', 'date'];
 
   const checkAll = () => {
@@ -77,14 +79,30 @@ export const Table: React.FC<Props> = ({ data, delete: any, edit }) => {
             return <td key={index}>{row[header]}</td>;
           })}
           <td>
-            <span className='btn px-0' onClick={() => delete row.id}>
-              צפה
+            <span className='btn px-0' onClick={() => delete(row.id)}>
+              <img
+                src='../../public/images/eye.png'
+                alt='watch'
+                height='10'
+                width='20'
+              />
             </span>
-            <span className='btn pl-0' onClick={() => delete row.id}>
-              מחק
+
+            <span className='btn' onClick={() => edit(row.id)}>
+              <img
+                src='../../public/images/edit.png'
+                alt='edit'
+                height='10'
+                width='20'
+              />
             </span>
-            <span className='btn' onClick={() => edit()}>
-              ערוך
+            <span className='btn pl-0' onClick={() => watch(row.id)}>
+              <img
+                src='../../public/images/trash.png'
+                alt='trash'
+                height='10'
+                width='20'
+              />
             </span>
           </td>
         </Row>

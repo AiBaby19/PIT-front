@@ -2,6 +2,11 @@ import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { Task } from '../models/Task';
 
+interface Props {
+  task: Task;
+  submit: (task: Task) => void;
+}
+
 const FormWrapper = styled.form`
   display: flex;
   width: auto;
@@ -22,22 +27,28 @@ const InputText = styled.input`
   border-bottom: 1px solid lightgrey;
 `;
 
-
-export const Form: React.FC<any> = ({ ...data }) => {
+export const Form: React.FC<Props> = ({ task, submit }) => {
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
   const [email, setEmail] = useState('');
 
-  //   useEffect(() => {
-  //     setName(diversity?.name || '');
-  //     setEnable(diversity?.enable || false);
-  //     setClients(diversity?.clients || '');
-  //     setItems(diversity?.items || '');
-  //   }, [diversity]);
+    useEffect(() => {
+      setName(task?.name || '');
+      setPhone(task?.phone || '');
+      setEmail(task?.email || '');
+    }, [task]);
 
   const handleSubmit = (e: any) => {
     e.preventDefault();
-    // const values = { name, enable, items, clients, id:  };
+    submit({ name, phone, email, date: addDate() });
+  };
+
+  const addDate = () => {
+    const date = new Date();
+    return `${date.getDate()}.${date.getMonth()}.${date
+      .getFullYear()
+      .toString()
+      .substr(2, 2)}`;
   };
 
   const resetForm = () => {
@@ -57,17 +68,19 @@ export const Form: React.FC<any> = ({ ...data }) => {
         type='text'
         value={email}
         placeholder='מייל'
-        onChange={(e) => setName(e.target.value)}
+        onChange={(e) => setEmail(e.target.value)}
       />
 
       <InputText
         type='text'
         value={phone}
         placeholder='טלפון'
-        onChange={(e) => setName(e.target.value)}
+        onChange={(e) => setPhone(e.target.value)}
       />
       <div>
-        <button className='btn btn-primary mr-4'>הוסף</button>
+        <button type='submit' className='btn btn-primary mr-4'>
+          הוסף
+        </button>
       </div>
     </FormWrapper>
   );
