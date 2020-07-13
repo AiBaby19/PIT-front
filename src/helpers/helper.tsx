@@ -14,7 +14,7 @@ export const fetchTasks = async (): Promise<Task[]> => {
   }
 };
 
-export const fetchTask = async (id: number) => {
+export const fetchTask = async (id: number): Promise<Task> => {
   try {
     let response = await fetch(`${getURL('tasks')}/${id}`);
     const data = await response.json();
@@ -24,31 +24,39 @@ export const fetchTask = async (id: number) => {
   }
 };
 
-export const addTask = async (item: Task) => {
-  let response = await fetch(`${getURL('tasks')}`, {
-    method: 'post',
-    body: JSON.stringify(item),
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  });
-  const res = await response.json();
-  return res;
+export const addTask = async (item: Task): Promise<string> => {
+  try {
+    const response = await fetch(`${getURL('tasks')}`, {
+      method: 'post',
+      body: JSON.stringify(item),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+    const res = await response.json();
+    return res;
+  } catch (err) {
+    throw err;
+  }
 };
 
-export const updateTask = async (task: Task) => {
-  let response = await fetch(`${getURL('tasks')}/${task.id}`, {
-    method: 'put',
-    body: JSON.stringify(task),
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  });
-  const res = await response.json();
-  return res;
+export const updateTask = async (task: Task): Promise<string> => {
+  try {
+    const response = await fetch(`${getURL('tasks')}/${task.id}`, {
+      method: 'put',
+      body: JSON.stringify(task),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+    const res = await response.json();
+    return res;
+  } catch (err) {
+    throw err;
+  }
 };
 
-export const deleteTask = async (id: number) => {
+export const deleteTask = async (id: number): Promise<string> => {
   try {
     let response = await fetch(`${getURL('tasks')}/${id}`, {
       method: 'delete',

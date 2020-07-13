@@ -6,7 +6,6 @@ interface Props {
   tasks: Task[];
   deleteTask: (id: number) => void;
   edit: (id: number) => void;
-  watch: (id: number) => void;
 }
 
 const TableWrapper = styled.table`
@@ -32,27 +31,24 @@ const Row = styled.tr`
   text-align: right;
   font-size: 12px;
   color: #3a3e69;
+  &:hover {
+    background-color: #d1f1e6;
+  }
 `;
 
 const CheckBox = styled.td`
   background-color: transparent;
+  padding-right: 10px;
 `;
 
 const HeaderCheckBox = styled.td`
   background-color: #efefef;
   border-bottom: 1px solid #dddddd;
+  padding-right: 10px;
 `;
 
-export const Table: React.FC<Props> = ({ tasks, deleteTask, edit, watch }) => {
+export const Table: React.FC<Props> = ({ tasks, deleteTask, edit }) => {
   const headers = ['name', 'phone', 'email', 'date'];
-
-  const checkAll = () => {
-    console.log('all');
-  };
-
-  const checkOne = () => {
-    console.log('one');
-  };
 
   const translate = (header: string) => {
     if (header === 'name') return 'שם משתמש';
@@ -70,36 +66,40 @@ export const Table: React.FC<Props> = ({ tasks, deleteTask, edit, watch }) => {
   const renderTableData = () => {
     return tasks.map((row: any, index: number) => {
       return (
-        <Row key={index}>
+        <Row className='pointer' key={index}>
           <CheckBox>
-            <input type='checkbox' onChange={checkAll} />
+            <input type='checkbox'/>
           </CheckBox>
           {headers.map((header, index) => {
-            return <td key={index}>{row[header]}</td>;
+            return (
+              <td key={index}>
+                {header === 'date' ? (
+                  <img
+                    src='./images/done.png'
+                    alt='checked'
+                    width='10'
+                    className='ml-2 mb-1'
+                  />
+                ) : (
+                  ''
+                )}
+                {row[header]}
+              </td>
+            );
           })}
           <td>
-            <span className='btn px-0' onClick={() => watch(row.id)}>
-              <img
-                src='../../public/images/eye.png'
-                alt='watch'
-                height='10'
-                width='20'
-              />
+            <span className='btn pr-0'>
+              <img src='./images/eye.png' alt='watch' height='20' width='20' />
             </span>
 
             <span className='btn' onClick={() => edit(row.id)}>
-              <img
-                src='../../public/images/edit.png'
-                alt='edit'
-                height='10'
-                width='20'
-              />
+              <img src='./images/edit.png' alt='edit' height='20' width='20' />
             </span>
-            <span className='btn pl-0' onClick={() => deleteTask(row.id)}>
+            <span className='btn' onClick={() => deleteTask(row.id)}>
               <img
-                src='../../public/images/trash.png'
+                src='./images/trash.png'
                 alt='trash'
-                height='10'
+                height='20'
                 width='20'
               />
             </span>
@@ -114,7 +114,7 @@ export const Table: React.FC<Props> = ({ tasks, deleteTask, edit, watch }) => {
       <tbody>
         <Row>
           <HeaderCheckBox>
-            <input type='checkbox' onChange={checkOne} />
+            <input type='checkbox'/>
           </HeaderCheckBox>
 
           {tasks && renderTableHeader()}

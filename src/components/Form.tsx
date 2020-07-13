@@ -39,24 +39,23 @@ export const Form: React.FC<Props> = ({ task, submit, submitEditTask }) => {
     setEmail(task?.email || '');
   }, [task]);
 
-  const handleSubmit = (e: any) => {
+  const handleSubmit = (e: any): void => {
     e.preventDefault();
-
+    if (!name || (!email || !phone)) {
+      alert ('please fill name and at least phone or email');
+      return;
+    }
     const values: Task = { name, phone, email, date: addDate(), id: task.id };
 
     task?.name ? submitEditTask(values) : submit(values);
   };
 
-  const addDate = () => {
+  const addDate = (): string => {
     const date = new Date();
     return `${date.getDate()}.${date.getMonth()}.${date
       .getFullYear()
       .toString()
       .substr(2, 2)}`;
-  };
-
-  const resetForm = () => {
-    // setDiversityEdit('');
   };
 
   return (

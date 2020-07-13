@@ -9,20 +9,12 @@ import {
 
 import { Table } from './components/Table';
 import { Form } from './components/Form';
-import { Header } from './components/Header';
 import { Task } from './models/Task';
+import { initialTask } from './helpers/initialTask';
 
 import './App.css';
 
-function App() {
-  const initialTask: Task = {
-    id: 0,
-    name: '',
-    phone: '',
-    email: '',
-    date: '',
-  };
-
+const App = () => {
   const [toggleForm, setToggleForm] = useState(false);
   const [task, setTask] = useState<Task>(initialTask);
   const [tasks, setTasks] = useState<Task[]>([]);
@@ -37,34 +29,32 @@ function App() {
   };
 
   const submitTask = async (task: Task): Promise<string | void> => {
-    console.log('res')
     const res: string = await addTask(task);
-    
+
     handleResponse(res);
   };
 
   const eraseTask = async (id: number): Promise<string | void> => {
-    const res = await deleteTask(id);
+    const res: string = await deleteTask(id);
     handleResponse(res);
   };
 
   const getTask = async (id: number): Promise<Task | void> => {
-    const task = await fetchTask(id);
+    const task: Task = await fetchTask(id);
     setTask(task);
   };
 
   const submitEditTask = async (task: Task) => {
-      console.log('here')
-    const res = await updateTask(task);
+    const res: string = await updateTask(task);
     handleResponse(res);
   };
 
-  const writeNewTask = () => {
+  const writeNewTask = (): void => {
     setToggleForm(!toggleForm);
     setTask(initialTask);
   };
 
-  const handleResponse = (res: string) => {
+  const handleResponse = (res: string): void => {
     if (res === 'success') {
       getTasks();
       setTask(initialTask);
@@ -74,7 +64,8 @@ function App() {
   };
 
   return (
-    <div>
+    <div className='m-0 p-0'>
+      <img id='img-header' src='./images/Group 4.png' alt='header' />
       <div id='wrapper'>
         <h4 className='primary-color text-right'>ניהול משימות</h4>
         <input className='search' placeholder='חיפוש משימה...' type='text' />
@@ -95,14 +86,10 @@ function App() {
         ) : (
           ''
         )}
-        <Table
-          tasks={tasks}
-          deleteTask={eraseTask}
-          edit={getTask}
-          watch={getTask}></Table>
+        <Table tasks={tasks} deleteTask={eraseTask} edit={getTask}></Table>
       </div>
     </div>
   );
-}
+};
 
 export default App;
