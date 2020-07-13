@@ -65,7 +65,7 @@ const App = () => {
 
   return (
     <div className='m-0 p-0'>
-      <img id='img-header' src='./images/Group 4.png' alt='header' />
+      <img id='img-header' src='./images/header.png' alt='header' />
       <div id='wrapper'>
         <h4 className='primary-color text-right'>ניהול משימות</h4>
         <input className='search' placeholder='חיפוש משימה...' type='text' />

@@ -18,6 +18,7 @@ const FormWrapper = styled.form`
   justify-content: center;
   padding: 35px;
   margin-bottom: 15px;
+  box-sizing : border-box;
 `;
 
 const InputText = styled.input`
@@ -26,6 +27,7 @@ const InputText = styled.input`
   height: 40px;
   text-align: right;
   border-bottom: 1px solid lightgrey;
+  min-width: 0
 `;
 
 export const Form: React.FC<Props> = ({ task, submit, submitEditTask }) => {
