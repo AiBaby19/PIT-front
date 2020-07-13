@@ -1,4 +1,50 @@
-.wrapper {
-  width: 85%;
-  min-width: 400px;
+body {
+  direction: rtl;
+  text-align: right;
+  font-family: 'Heebo', sans-serif;
 }
+
+#wrapper {
+  display: flex;
+  flex-direction: column;
+  width: 80%;
+  margin: 35px auto;
+  text-align: center;
+}
+
+.rtl {
+  direction: rtl;
+  text-align: right;
+}
+
+.primary-color {
+  color: #00B074;
+}
+
+.primary-btn {
+  cursor: pointer;
+  width: 120px;
+  height: 30px;
+  border: none;
+  border-radius: 2px;
+  background-color: #00B074;
+  color: white;
+}
+
+.search {
+  margin: 10px 0 30px 0;
+  font-size: 12px;
+  padding: 5px;
+}
+
+.transparent {
+  background-color: transparent;
+}
+
+.client-list {
+  font-size: 10px;
+  font-weight: 700;
+  padding-top: 10px;
+}
+
+
