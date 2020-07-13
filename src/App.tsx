@@ -1,4 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import {
+  fetchTasks,
+  deleteTask,
+  addTask,
+  fetchTask,
+  updateTask,
+} from './helpers/helper';
+
 import { Table } from './components/Table';
 import { Form } from './components/Form';
 import { Header } from './components/Header';
@@ -17,29 +25,38 @@ function App() {
 
   const [toggleForm, setToggleForm] = useState(false);
   const [task, setTask] = useState<Task>(initialTask);
+  const [tasks, setTasks] = useState<Task[]>([]);
 
-  const data: Task[] = [];
+  useEffect(() => {
+    getTasks();
+  }, []);
 
-  const API_URL = `http://localhost:8000/api`;
-  const deleteTask = async (id: number = 1) => {
-    console.log(id);
-    // await itemDelete(getURL(type), id);
-    // itemDelete('items', id);
+  const getTasks = async (): Promise<Task[] | void> => {
+    const tasks: Task[] = await fetchTasks();
+    setTasks(tasks);
   };
 
-  const getTask = async (id: number = 1) => {
-    console.log('edit');
-    // TEMP UNTIL SERVER SERVER
-    setTask(data[id]);
+  const submitTask = async (task: Task): Promise<string | void> => {
+    console.log('res')
+    const res: string = await addTask(task);
+    
+    handleResponse(res);
   };
 
-  const submitTask = (item: any) => {
-    console.log('submit', item);
-    // itemSubmit('items', item);
+  const eraseTask = async (id: number): Promise<string | void> => {
+    const res = await deleteTask(id);
+    handleResponse(res);
   };
 
-  const submitEditItem = (item: any) => {
-    // itemEditSubmit('items', item);
+  const getTask = async (id: number): Promise<Task | void> => {
+    const task = await fetchTask(id);
+    setTask(task);
+  };
+
+  const submitEditTask = async (task: Task) => {
+      console.log('here')
+    const res = await updateTask(task);
+    handleResponse(res);
   };
 
   const writeNewTask = () => {
@@ -47,20 +64,14 @@ function App() {
     setTask(initialTask);
   };
 
-  const makeData = () => {
-    for (let i = 0; i < 11; i++) {
-      const row = {
-        id: i,
-        name: 'שם משתמש',
-        phone: '052141232',
-        email: 'some@email.com',
-        date: '14/7/2020',
-      };
-      data.push(row);
-      // console.log(row)
+  const handleResponse = (res: string) => {
+    if (res === 'success') {
+      getTasks();
+      setTask(initialTask);
+    } else {
+      alert(res);
     }
   };
-  makeData();
 
   return (
     <div>
@@ -69,20 +80,24 @@ function App() {
         <input className='search' placeholder='חיפוש משימה...' type='text' />
         <div className='d-flex justify-content-between'>
           <p className='client-list'>
-            רשימת הלקוחות שלך <span>({data.length})</span>
+            רשימת הלקוחות שלך <span>({tasks.length})</span>
           </p>
           <button onClick={() => writeNewTask()} className='primary-btn'>
             משרה חדשה
           </button>
         </div>
         {toggleForm || task.name ? (
-          <Form task={task} submit={submitTask} />
+          <Form
+            task={task}
+            submit={submitTask}
+            submitEditTask={submitEditTask}
+          />
         ) : (
           ''
         )}
         <Table
-          data={data}
-          delete={deleteTask}
+          tasks={tasks}
+          deleteTask={eraseTask}
           edit={getTask}
           watch={getTask}></Table>
       </div>

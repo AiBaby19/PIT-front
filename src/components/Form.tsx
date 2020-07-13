@@ -5,6 +5,7 @@ import { Task } from '../models/Task';
 interface Props {
   task: Task;
   submit: (task: Task) => void;
+  submitEditTask: (task: Task) => void;
 }
 
 const FormWrapper = styled.form`
@@ -27,20 +28,23 @@ const InputText = styled.input`
   border-bottom: 1px solid lightgrey;
 `;
 
-export const Form: React.FC<Props> = ({ task, submit }) => {
+export const Form: React.FC<Props> = ({ task, submit, submitEditTask }) => {
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
   const [email, setEmail] = useState('');
 
-    useEffect(() => {
-      setName(task?.name || '');
-      setPhone(task?.phone || '');
-      setEmail(task?.email || '');
-    }, [task]);
+  useEffect(() => {
+    setName(task?.name || '');
+    setPhone(task?.phone || '');
+    setEmail(task?.email || '');
+  }, [task]);
 
   const handleSubmit = (e: any) => {
     e.preventDefault();
-    submit({ name, phone, email, date: addDate() });
+
+    const values: Task = { name, phone, email, date: addDate(), id: task.id };
+
+    task?.name ? submitEditTask(values) : submit(values);
   };
 
   const addDate = () => {
@@ -79,7 +83,7 @@ export const Form: React.FC<Props> = ({ task, submit }) => {
       />
       <div>
         <button type='submit' className='btn btn-primary mr-4'>
-          הוסף
+          {task ? 'הוסף' : 'עדכן'}
         </button>
       </div>
     </FormWrapper>

@@ -1,11 +1,10 @@
 import React from 'react';
 import { Task } from '../models/Task';
 import styled from 'styled-components';
-import trash from '../../public/images/trash.png';
 
 interface Props {
-  data: Task[];
-  delete: (id: number) => void;
+  tasks: Task[];
+  deleteTask: (id: number) => void;
   edit: (id: number) => void;
   watch: (id: number) => void;
 }
@@ -44,7 +43,7 @@ const HeaderCheckBox = styled.td`
   border-bottom: 1px solid #dddddd;
 `;
 
-export const Table: React.FC<Props> = ({ data, delete: any, edit, watch }) => {
+export const Table: React.FC<Props> = ({ tasks, deleteTask, edit, watch }) => {
   const headers = ['name', 'phone', 'email', 'date'];
 
   const checkAll = () => {
@@ -69,7 +68,7 @@ export const Table: React.FC<Props> = ({ data, delete: any, edit, watch }) => {
   };
 
   const renderTableData = () => {
-    return data.map((row: any, index: number) => {
+    return tasks.map((row: any, index: number) => {
       return (
         <Row key={index}>
           <CheckBox>
@@ -79,7 +78,7 @@ export const Table: React.FC<Props> = ({ data, delete: any, edit, watch }) => {
             return <td key={index}>{row[header]}</td>;
           })}
           <td>
-            <span className='btn px-0' onClick={() => delete(row.id)}>
+            <span className='btn px-0' onClick={() => watch(row.id)}>
               <img
                 src='../../public/images/eye.png'
                 alt='watch'
@@ -96,7 +95,7 @@ export const Table: React.FC<Props> = ({ data, delete: any, edit, watch }) => {
                 width='20'
               />
             </span>
-            <span className='btn pl-0' onClick={() => watch(row.id)}>
+            <span className='btn pl-0' onClick={() => deleteTask(row.id)}>
               <img
                 src='../../public/images/trash.png'
                 alt='trash'
@@ -118,10 +117,10 @@ export const Table: React.FC<Props> = ({ data, delete: any, edit, watch }) => {
             <input type='checkbox' onChange={checkOne} />
           </HeaderCheckBox>
 
-          {data && renderTableHeader()}
+          {tasks && renderTableHeader()}
           <HeaderRow>{'פעולות'}</HeaderRow>
         </Row>
-        {data && renderTableData()}
+        {tasks && renderTableData()}
       </tbody>
     </TableWrapper>
   );
