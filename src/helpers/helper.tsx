@@ -2,7 +2,8 @@ import { Task } from '../models/Task';
 import { User } from '../models/User';
 
 export const getURL = (type: string) => {
-  return `http://localhost:3001/api/${type}`;
+  
+  return `http://ec2-63-32-45-2.eu-west-1.compute.amazonaws.com/api/${type}`;
 };
 
 export const fetchTasks = async (userId: any): Promise<Task[]> => {

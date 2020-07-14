@@ -70,7 +70,7 @@ export const TaskForm: React.FC<Props> = ({ task, submit, submitEditTask }) => {
       />
 
       <InputText
-        type='text'
+        type='email'
         value={email}
         placeholder='מייל'
         onChange={(e) => setEmail(e.target.value)}
