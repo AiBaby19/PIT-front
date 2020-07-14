@@ -20,7 +20,7 @@ import './App.css';
 
 const App = () => {
   const [toggleForm, setToggleForm] = useState(false);
-  const [task, setTask] = useState<Task>(initialTask);
+  const [task, setTask] = useState<any>(initialTask);
   const [tasks, setTasks] = useState<Task[]>([]);
   const [userId, setUserId] = useState<any>(localStorage.getItem('userId'));
 
@@ -69,31 +69,30 @@ const App = () => {
     handleUserResponse(res);
   };
 
-  const logout = () => {
-    setUserId('');
-    localStorage.removeItem('token');
-    localStorage.removeItem('userId');
-  };
-
   const register = async (user: User): Promise<string | void> => {
     const res: string = await registerUser(user);
     handleUserResponse(res);
   };
 
-  const handleUserResponse = (res: any) => {
-    console.log(res)
+  const logout = (): void => {
+    setUserId('');
+    localStorage.removeItem('token');
+    localStorage.removeItem('userId');
+  };
+
+  const handleUserResponse = (res: any): void => {
     if (res?.status === 'error') return alert(res.message);
 
     localStorage.setItem('token', res.token);
-    localStorage.setItem('userId', res.id);
-    setUserId(res.id);
+    localStorage.setItem('userId', res.userId);
+    setUserId(res.userId);
   };
 
   const handleResponse = (res: any): void => {
     if (res?.status === 'error') return alert(res.message);
 
     getTasks();
-    setTask(initialTask);
+    setTask('');
   };
 
   const showApp = (): any => {
@@ -112,14 +111,12 @@ const App = () => {
             משרה חדשה
           </button>
         </div>
-        {toggleForm || task.name ? (
+        {(toggleForm || task.name) && (
           <TaskForm
             task={task}
             submit={submitTask}
             submitEditTask={submitEditTask}
           />
-        ) : (
-          ''
         )}
         <Table tasks={tasks} deleteTask={eraseTask} edit={getTask}></Table>
       </div>

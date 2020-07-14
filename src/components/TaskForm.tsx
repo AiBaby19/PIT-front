@@ -84,7 +84,7 @@ export const TaskForm: React.FC<Props> = ({ task, submit, submitEditTask }) => {
       />
       <div>
         <button type='submit' className='btn btn-primary mr-4'>
-          {task ? 'הוסף' : 'עדכן'}
+          {task?.name ? 'עדכן' : 'הוסף'}
         </button>
       </div>
     </FormWrapper>

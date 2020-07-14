@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import { Task } from '../models/Task';
 import { User } from '../models/User';
 
 interface Props {
@@ -43,9 +42,9 @@ export const AuthForm: React.FC<Props> = ({ login, register }) => {
       alert('please fill all email & password');
       return;
     }
-    const user: User = { email, password};
+    const user: User = { email, password };
     if (!isLoginForm) user.isAdmin = isAdmin;
-    
+
     isLoginForm ? login(user) : register(user);
   };
 
@@ -72,7 +71,7 @@ export const AuthForm: React.FC<Props> = ({ login, register }) => {
         onChange={(e) => setPassword(e.target.value)}
       />
 
-      {!isLoginForm ? (
+      {!isLoginForm && (
         <div className='mt-4'>
           <input
             checked={isAdmin}
@@ -84,8 +83,6 @@ export const AuthForm: React.FC<Props> = ({ login, register }) => {
             הירשם כמנהל
           </label>
         </div>
-      ) : (
-        ''
       )}
 
       <div className='text-left mt-4'>
