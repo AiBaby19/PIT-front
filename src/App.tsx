@@ -24,17 +24,18 @@ const App = () => {
   const [tasks, setTasks] = useState<Task[]>([]);
 
   const [user, setUser] = useState<User>();
-  // {email: 'ss', password: '12'}
   useEffect(() => {
     getTasks();
-  }, []);
+  }, [user]);
 
   const getTasks = async (): Promise<Task[] | void> => {
-    const tasks: Task[] = await fetchTasks();
+    if (!user) return;
+    const tasks: Task[] = await fetchTasks(user);
     setTasks(tasks);
   };
 
   const submitTask = async (task: Task): Promise<string | void> => {
+    task.user = user;
     const res: string = await addTask(task);
 
     handleResponse(res);

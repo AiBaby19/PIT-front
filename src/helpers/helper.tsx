@@ -6,10 +6,11 @@ export const getURL = (type: string) => {
   return `http://localhost:3001/api/${type}`;
 };
 
-export const fetchTasks = async (): Promise<Task[]> => {
+export const fetchTasks = async (user: any): Promise<Task[]> => {
   try {
-    let response = await fetch(getURL('tasks'));
+    let response = await fetch(`${getURL('tasks')}/by-user/${user}`);
     const data = await response.json();
+
     return data;
   } catch (err) {
     throw err;
@@ -26,11 +27,11 @@ export const fetchTask = async (id: number): Promise<Task> => {
   }
 };
 
-export const addTask = async (item: Task): Promise<string> => {
+export const addTask = async (task: Task): Promise<string> => {
   try {
     const response = await fetch(`${getURL('tasks')}`, {
       method: 'post',
-      body: JSON.stringify(item),
+      body: JSON.stringify(task),
       headers: {
         'Content-Type': 'application/json',
       },
