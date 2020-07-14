@@ -1,7 +1,6 @@
 import { Task } from '../models/Task';
 import { User } from '../models/User';
 
-
 export const getURL = (type: string) => {
   return `http://localhost:3001/api/${type}`;
 };
@@ -11,7 +10,6 @@ export const fetchTasks = async (userId: any): Promise<Task[]> => {
   try {
     let response = await fetch(`${getURL('tasks')}/by-user/${userId}/${token}`);
     const data = await response.json();
-
     return data;
   } catch (err) {
     throw err;
@@ -72,10 +70,9 @@ export const deleteTask = async (id: number): Promise<string> => {
   }
 };
 
-
 export const registerUser = async (user: User): Promise<string> => {
   try {
-    const response = await fetch(`${getURL('user/register')}`, {
+    const response = await fetch(`${getURL('auth/register')}`, {
       method: 'post',
       body: JSON.stringify(user),
       headers: {
@@ -91,7 +88,7 @@ export const registerUser = async (user: User): Promise<string> => {
 
 export const loginUser = async (user: User): Promise<string> => {
   try {
-    const response = await fetch(`${getURL('user/login')}`, {
+    const response = await fetch(`${getURL('auth/login')}`, {
       method: 'post',
       body: JSON.stringify(user),
       headers: {

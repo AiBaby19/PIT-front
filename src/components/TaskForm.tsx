@@ -30,7 +30,7 @@ const InputText = styled.input`
   min-width: 0
 `;
 
-export const Form: React.FC<Props> = ({ task, submit, submitEditTask }) => {
+export const TaskForm: React.FC<Props> = ({ task, submit, submitEditTask }) => {
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
   const [email, setEmail] = useState('');

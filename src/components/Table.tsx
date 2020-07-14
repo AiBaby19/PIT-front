@@ -68,7 +68,7 @@ export const Table: React.FC<Props> = ({ tasks, deleteTask, edit }) => {
       return (
         <Row className='pointer' key={index}>
           <CheckBox>
-            <input type='checkbox'/>
+            <input type='checkbox' />
           </CheckBox>
           {headers.map((header, index) => {
             return (
@@ -114,7 +114,7 @@ export const Table: React.FC<Props> = ({ tasks, deleteTask, edit }) => {
       <tbody>
         <Row>
           <HeaderCheckBox>
-            <input type='checkbox'/>
+            <input type='checkbox' />
           </HeaderCheckBox>
 
           {tasks && renderTableHeader()}

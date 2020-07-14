@@ -10,8 +10,8 @@ import {
 } from './helpers/helper';
 
 import { Table } from './components/Table';
-import { Form } from './components/Form';
-import { UserForm } from './components/UserForm';
+import { TaskForm } from './components/TaskForm';
+import { AuthForm } from './components/AuthForm';
 import { Task } from './models/Task';
 import { User } from './models/User';
 import { initialTask } from './helpers/initialTask';
@@ -22,23 +22,16 @@ const App = () => {
   const [toggleForm, setToggleForm] = useState(false);
   const [task, setTask] = useState<Task>(initialTask);
   const [tasks, setTasks] = useState<Task[]>([]);
-
   const [userId, setUserId] = useState<any>(localStorage.getItem('userId'));
-
-  // const checkLoggedIn = () => {
-  //   return localStorage.getItem('token') && localStorage.getItem('userId');
-  // };
-  // const [isLoggedIn, setIsLoggedIn] = useState<any>(() => checkLoggedIn());
 
   useEffect(() => {
     getTasks();
     setTasks([]);
-    // setUserId('');
   }, [userId]);
 
   const getTasks = async (): Promise<Task[] | void> => {
     if (!userId) return;
-    console.log(userId)
+
     const tasks: Task[] = await fetchTasks(userId);
     setTasks(tasks);
   };
@@ -72,6 +65,7 @@ const App = () => {
 
   const login = async (user: User): Promise<string | void> => {
     const res: string = await loginUser(user);
+
     handleUserResponse(res);
   };
 
@@ -79,7 +73,6 @@ const App = () => {
     setUserId('');
     localStorage.removeItem('token');
     localStorage.removeItem('userId');
-    // setIsLoggedIn(false);
   };
 
   const register = async (user: User): Promise<string | void> => {
@@ -88,57 +81,55 @@ const App = () => {
   };
 
   const handleUserResponse = (res: any) => {
-    if (res.success) {
-      localStorage.setItem('token', res.success.token);
-      localStorage.setItem('userId', res.success.userId);
-      // setIsLoggedIn(true);
-      setUserId(res.success.userId);
-    } else {
-      alert(res.failed);
-    }
+    console.log(res)
+    if (res?.status === 'error') return alert(res.message);
+
+    localStorage.setItem('token', res.token);
+    localStorage.setItem('userId', res.id);
+    setUserId(res.id);
   };
 
-  const handleResponse = (res: string): void => {
-    if (res === 'success') {
-      getTasks();
-      setTask(initialTask);
-    } else {
-      alert(res);
-    }
+  const handleResponse = (res: any): void => {
+    if (res?.status === 'error') return alert(res.message);
+
+    getTasks();
+    setTask(initialTask);
+  };
+
+  const showApp = (): any => {
+    return (
+      <div id='wrapper'>
+        <div className='logout' onClick={logout}>
+          Logout
+        </div>
+        <h4 className='primary-color text-right'>ניהול משימות</h4>
+        <input className='search' placeholder='חיפוש משימה...' type='text' />
+        <div className='d-flex justify-content-between'>
+          <p className='client-list'>
+            רשימת הלקוחות שלך <span>({tasks.length})</span>
+          </p>
+          <button onClick={() => writeNewTask()} className='primary-btn'>
+            משרה חדשה
+          </button>
+        </div>
+        {toggleForm || task.name ? (
+          <TaskForm
+            task={task}
+            submit={submitTask}
+            submitEditTask={submitEditTask}
+          />
+        ) : (
+          ''
+        )}
+        <Table tasks={tasks} deleteTask={eraseTask} edit={getTask}></Table>
+      </div>
+    );
   };
 
   return (
     <div className='m-0 p-0 rtl'>
       <img id='img-header' src='./images/header.png' alt='header' />
-      {!userId ? (
-        <UserForm login={login} register={register} />
-      ) : (
-        <div id='wrapper'>
-          <div className='logout' onClick={logout}>
-            Logout
-          </div>
-          <h4 className='primary-color text-right'>ניהול משימות</h4>
-          <input className='search' placeholder='חיפוש משימה...' type='text' />
-          <div className='d-flex justify-content-between'>
-            <p className='client-list'>
-              רשימת הלקוחות שלך <span>({tasks.length})</span>
-            </p>
-            <button onClick={() => writeNewTask()} className='primary-btn'>
-              משרה חדשה
-            </button>
-          </div>
-          {toggleForm || task.name ? (
-            <Form
-              task={task}
-              submit={submitTask}
-              submitEditTask={submitEditTask}
-            />
-          ) : (
-            ''
-          )}
-          <Table tasks={tasks} deleteTask={eraseTask} edit={getTask}></Table>
-        </div>
-      )}
+      {!userId ? <AuthForm login={login} register={register} /> : showApp()}
     </div>
   );
 };

@@ -31,7 +31,7 @@ const InputText = styled.input`
   min-width: 0;
 `;
 
-export const UserForm: React.FC<Props> = ({ login, register }) => {
+export const AuthForm: React.FC<Props> = ({ login, register }) => {
   const [isLoginForm, setIsLoginForm] = useState(true);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
