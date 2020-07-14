@@ -43,8 +43,9 @@ export const UserForm: React.FC<Props> = ({ login, register }) => {
       alert('please fill all email & password');
       return;
     }
-    const user: User = { email, password };
-
+    const user: User = { email, password};
+    if (!isLoginForm) user.isAdmin = isAdmin;
+    
     isLoginForm ? login(user) : register(user);
   };
 

@@ -5,7 +5,8 @@ import {
   addTask,
   fetchTask,
   updateTask,
-  registerUser
+  registerUser,
+  loginUser
 } from './helpers/helper';
 
 import { Table } from './components/Table';
@@ -59,14 +60,30 @@ const App = () => {
     setTask(initialTask);
   };
 
-  const login = (user: User): void => {
-    console.log(user);
+  const login = async (user: User): Promise<string | void>  => {
+    const res: string = await loginUser(user);
+    handleUserResponse(res);
   };
 
   const register = async (user: User): Promise<string | void> => {
     const res: string = await registerUser(user);
-    console.log(res)
+
+    handleUserResponse(res);
   };
+
+  const handleUserResponse = (res: any) => {
+    if (res.success) {
+      rememberUser(res.success);
+      setUser(res.success);
+    } else {
+      alert(res.failed);
+    }
+  };
+
+  const rememberUser = (token: string) => {
+    localStorage.setItem('token', token);
+  };
+
 
   const handleResponse = (res: string): void => {
     if (res === 'success') {

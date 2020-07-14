@@ -86,3 +86,19 @@ export const registerUser = async (user: User): Promise<string> => {
     throw err;
   }
 };
+
+export const loginUser = async (user: User): Promise<string> => {
+  try {
+    const response = await fetch(`${getURL('user/login')}`, {
+      method: 'post',
+      body: JSON.stringify(user),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+    const res = await response.json();
+    return res;
+  } catch (err) {
+    throw err;
+  }
+};
