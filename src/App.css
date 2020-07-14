@@ -61,3 +61,12 @@ body {
   cursor: pointer;
 }
 
+.logout {
+  text-align: left;
+  cursor: pointer;
+}
+
+.logout:hover {
+  color: #00B074;
+}
+

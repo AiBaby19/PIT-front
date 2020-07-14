@@ -6,9 +6,10 @@ export const getURL = (type: string) => {
   return `http://localhost:3001/api/${type}`;
 };
 
-export const fetchTasks = async (user: any): Promise<Task[]> => {
+export const fetchTasks = async (userId: any): Promise<Task[]> => {
+  const token = localStorage.getItem('token');
   try {
-    let response = await fetch(`${getURL('tasks')}/by-user/${user}`);
+    let response = await fetch(`${getURL('tasks')}/by-user/${userId}/${token}`);
     const data = await response.json();
 
     return data;

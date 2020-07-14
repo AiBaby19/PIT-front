@@ -6,7 +6,7 @@ import {
   fetchTask,
   updateTask,
   registerUser,
-  loginUser
+  loginUser,
 } from './helpers/helper';
 
 import { Table } from './components/Table';
@@ -23,19 +23,28 @@ const App = () => {
   const [task, setTask] = useState<Task>(initialTask);
   const [tasks, setTasks] = useState<Task[]>([]);
 
-  const [user, setUser] = useState<User>();
+  const [userId, setUserId] = useState<any>(localStorage.getItem('userId'));
+
+  // const checkLoggedIn = () => {
+  //   return localStorage.getItem('token') && localStorage.getItem('userId');
+  // };
+  // const [isLoggedIn, setIsLoggedIn] = useState<any>(() => checkLoggedIn());
+
   useEffect(() => {
     getTasks();
-  }, [user]);
+    setTasks([]);
+    // setUserId('');
+  }, [userId]);
 
   const getTasks = async (): Promise<Task[] | void> => {
-    if (!user) return;
-    const tasks: Task[] = await fetchTasks(user);
+    if (!userId) return;
+    console.log(userId)
+    const tasks: Task[] = await fetchTasks(userId);
     setTasks(tasks);
   };
 
   const submitTask = async (task: Task): Promise<string | void> => {
-    task.user = user;
+    task.userId = userId;
     const res: string = await addTask(task);
 
     handleResponse(res);
@@ -61,30 +70,33 @@ const App = () => {
     setTask(initialTask);
   };
 
-  const login = async (user: User): Promise<string | void>  => {
+  const login = async (user: User): Promise<string | void> => {
     const res: string = await loginUser(user);
     handleUserResponse(res);
   };
 
+  const logout = () => {
+    setUserId('');
+    localStorage.removeItem('token');
+    localStorage.removeItem('userId');
+    // setIsLoggedIn(false);
+  };
+
   const register = async (user: User): Promise<string | void> => {
     const res: string = await registerUser(user);
-
     handleUserResponse(res);
   };
 
   const handleUserResponse = (res: any) => {
     if (res.success) {
-      rememberUser(res.success);
-      setUser(res.success);
+      localStorage.setItem('token', res.success.token);
+      localStorage.setItem('userId', res.success.userId);
+      // setIsLoggedIn(true);
+      setUserId(res.success.userId);
     } else {
       alert(res.failed);
     }
   };
-
-  const rememberUser = (token: string) => {
-    localStorage.setItem('token', token);
-  };
-
 
   const handleResponse = (res: string): void => {
     if (res === 'success') {
@@ -98,10 +110,13 @@ const App = () => {
   return (
     <div className='m-0 p-0 rtl'>
       <img id='img-header' src='./images/header.png' alt='header' />
-      {!user ? (
+      {!userId ? (
         <UserForm login={login} register={register} />
       ) : (
         <div id='wrapper'>
+          <div className='logout' onClick={logout}>
+            Logout
+          </div>
           <h4 className='primary-color text-right'>ניהול משימות</h4>
           <input className='search' placeholder='חיפוש משימה...' type='text' />
           <div className='d-flex justify-content-between'>
