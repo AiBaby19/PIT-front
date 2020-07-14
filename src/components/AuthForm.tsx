@@ -59,7 +59,7 @@ export const AuthForm: React.FC<Props> = ({ login, register }) => {
     <FormWrapper onSubmit={handleSubmit}>
       <h3 className='text-center'>{isLoginForm ? 'התחבר' : 'הרשמה'}</h3>
       <InputText
-        type='text'
+        type='email'
         value={email}
         placeholder='מייל'
         onChange={(e) => setEmail(e.target.value)}
