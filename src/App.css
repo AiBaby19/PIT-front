@@ -21,6 +21,10 @@ body {
   color: #00B074;
 }
 
+.primary-color-bg {
+  color: #00B074;
+}
+
 .primary-btn {
   cursor: pointer;
   width: 120px;
